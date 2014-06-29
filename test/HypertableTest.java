@@ -123,8 +123,8 @@ public class HypertableTest {
 		List<Item> items = TestHandler.queryHandler.getItems(TestHandler.TABLE_NAME, "AND", filters);
 		System.out.println(items.size());
 		for (Item item : items) {
-			for (String key : item.getAttributes().keySet()) {
-				System.out.println(key + " " + item.getAttributes().get(key));
+			for (String key : item.getAttributesMap().keySet()) {
+				System.out.println(key + " " + item.getAttributesMap().get(key).getValue());
 			}
 		}
 	}

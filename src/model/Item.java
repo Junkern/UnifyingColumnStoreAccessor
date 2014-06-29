@@ -1,24 +1,53 @@
 package model;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 public class Item {
-	private Map<String, String> attributes;
+	private Map<String, Attribute> attributes;
+	private Key key;
 	
-	public Item(Map<String, String> attributes) {
-		this.setAttributes(attributes);
+	public Item(List<Attribute> attributes) {
+		this.attributes = new HashMap<>();
+		for(Attribute attribute : attributes){
+			this.attributes.put(attribute.getName(), attribute);
+		}
+	}
+	
+	public Item(Key key, List<Attribute> attributes){
+		this.key = key;
+		this.attributes = new HashMap<>();
+		for(Attribute attribute : attributes){
+			this.attributes.put(attribute.getName(), attribute);
+		}
 	}
 
-	public Map<String, String> getAttributes() {
+	public Collection<Attribute> getAttributes() {
+		return attributes.values();
+	}
+	
+	public Map<String, Attribute> getAttributesMap() {
 		return attributes;
 	}
 
-	public void setAttributes(Map<String, String> attributes) {
-		this.attributes = attributes;
+	public void setAttributes(List<Attribute> attributes) {
+		for(Attribute attribute : attributes){
+			this.attributes.put(attribute.getName(), attribute);
+		}
 	}
 	
-	public void addAttribute(String name, String value){
-		attributes.put(name, value);
+	public void addAttribute(Attribute attribute){
+		attributes.put(attribute.getName(), attribute);
+	}
+
+	public Key getKey() {
+		return key;
+	}
+
+	public void setKey(Key key) {
+		this.key = key;
 	}
 }

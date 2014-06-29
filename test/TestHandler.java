@@ -5,62 +5,58 @@ import java.util.Map;
 
 import middleware.QueryHandler;
 import middleware.UnifyingMiddleware;
+import model.Attribute;
 import model.Item;
+import model.Key;
 
 
 public class TestHandler {
 
 	public static String TABLE_NAME = "test_mushroom_kingdom";
 	public static String TABLE_NAME2 = "test_hyrule";
+	public static String INDEX = "id";
 	public static QueryHandler queryHandler = UnifyingMiddleware.getQueryHandler();
 
 	public static void insertTestItems(String tableName) {
 		List<Item> items = new ArrayList<>();
-		Map<String, String> attributes = new HashMap<>();
+		List<Attribute> attributes = new ArrayList<>();
 
 		if (tableName.equals(TABLE_NAME)) {
-			attributes.put("id", "1");
-			attributes.put("name", "Mario");
-			items.add(new Item(attributes));
+			attributes.add(new Attribute("name", "Mario").withColumnFamil(INDEX));
+			items.add(new Item(new Key("id", "1"), attributes));
 
-			attributes = new HashMap<String, String>();
-			attributes.put("id", "2");
-			attributes.put("name", "Bowser");
-			attributes.put("type", "turtle");
-			items.add(new Item(attributes));
+			attributes = new ArrayList<>();
+			attributes.add(new Attribute("name", "Bowser").withColumnFamil(INDEX));
+			attributes.add(new Attribute("type", "turtle").withColumnFamil(INDEX));
+			items.add(new Item(new Key("id", "2"), attributes));
 
-			attributes = new HashMap<String, String>();
-			attributes.put("id", "3");
-			attributes.put("name", "Peach");
-			attributes.put("type", "princess");
-			attributes.put("age", "23");
-			items.add(new Item(attributes));
+			attributes = new ArrayList<>();
+			attributes.add(new Attribute("name", "Peach").withColumnFamil(INDEX));
+			attributes.add(new Attribute("type", "princess").withColumnFamil(INDEX));
+			attributes.add(new Attribute("age", "23").withColumnFamil(INDEX));
+			items.add(new Item(new Key("id", "3"), attributes));
 
-			attributes = new HashMap<String, String>();
-			attributes.put("id", "4");
-			attributes.put("name", "Daisy");
-			attributes.put("type", "princess");
-			attributes.put("age", "25");
-			items.add(new Item(attributes));
+			attributes = new ArrayList<>();
+			attributes.add(new Attribute("name", "Daisy").withColumnFamil(INDEX));
+			attributes.add(new Attribute("type", "princess").withColumnFamil(INDEX));
+			attributes.add(new Attribute("age", "25").withColumnFamil(INDEX));
+			items.add(new Item(new Key("id", "4"), attributes));
 
-			attributes = new HashMap<String, String>();
-			attributes.put("id", "5");
-			attributes.put("name", "Yoshi");
-			attributes.put("type", "dinosaur");
-			attributes.put("age", "42");
-			items.add(new Item(attributes));
+			attributes = new ArrayList<>();
+			attributes.add(new Attribute("name", "Yoshi").withColumnFamil(INDEX));
+			attributes.add(new Attribute("type", "dinosaur").withColumnFamil(INDEX));
+			attributes.add(new Attribute("age", "42").withColumnFamil(INDEX));
+			items.add(new Item(new Key("id", "5"), attributes));
 		}
 		else if (tableName.equals(TABLE_NAME2)) {
-			attributes.put("id", "100");
-			attributes.put("name", "Link");
-			attributes.put("status", "hero of time");
-			items.add(new Item(attributes));
+			attributes.add(new Attribute("name", "Link").withColumnFamil(INDEX));
+			attributes.add(new Attribute("status", "hero of time").withColumnFamil(INDEX));
+			items.add(new Item(new Key("id", "100"), attributes));
 
-			attributes = new HashMap<String, String>();
-			attributes.put("id", "200");
-			attributes.put("name", "Ganondorf");
-			attributes.put("alias", "Ganon");
-			items.add(new Item(attributes));
+			attributes = new ArrayList<>();
+			attributes.add(new Attribute("name", "Ganondorf").withColumnFamil(INDEX));
+			attributes.add(new Attribute("alias", "Ganon").withColumnFamil(INDEX));
+			items.add(new Item(new Key("id", "200"), attributes));
 		}
 		queryHandler.insertItems(tableName, items);
 	}
@@ -71,8 +67,8 @@ public class TestHandler {
 	}
 
 	public static void createTestTables() {
-		queryHandler.createTable(TABLE_NAME, "id");
-		queryHandler.createTable(TABLE_NAME2, "id");
+		queryHandler.createTable(TABLE_NAME, INDEX);
+		queryHandler.createTable(TABLE_NAME2, INDEX);
 	}
 
 	public static List<String> getTestTableNames(List<String> tableNames) {

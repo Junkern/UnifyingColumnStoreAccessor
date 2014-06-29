@@ -31,8 +31,8 @@ public class DynamoDbTest {
 		key.put("id", "2");
 
 		Item item = TestHandler.queryHandler.getItemByKey(TestHandler.TABLE_NAME, key);
-		assertEquals("Bowser", item.getAttributes().get("name"));
-		assertEquals(true, item.getAttributes().containsKey("type"));
+		assertEquals("Bowser", item.getAttributesMap().get("name").getValue());
+		assertEquals(true, item.getAttributesMap().containsKey("type"));
 	}
 
 	@Test
@@ -50,21 +50,21 @@ public class DynamoDbTest {
 		boolean ganondorf = false;
 		
 		for(Item item : items){
-			if(item.getAttributes().get("name").equals("Mario")){
-				assertEquals(false, item.getAttributes().containsKey("type"));
+			if(item.getAttributesMap().get("name").getValue().equals("Mario")){
+				assertEquals(false, item.getAttributesMap().containsKey("type"));
 				mario = true;
 			}
-			else if(item.getAttributes().get("name").equals("Link")){
-				assertEquals("hero of time", item.getAttributes().get("status"));
+			else if(item.getAttributesMap().get("name").getValue().equals("Link")){
+				assertEquals("hero of time", item.getAttributesMap().get("status").getValue());
 				link = true;
 			}
-			else if(item.getAttributes().get("name").equals("Bowser")){
-				assertEquals(true, item.getAttributes().containsKey("type"));
+			else if(item.getAttributesMap().get("name").getValue().equals("Bowser")){
+				assertEquals(true, item.getAttributesMap().containsKey("type"));
 				bowser = true;
 			}
-			else if(item.getAttributes().get("name").equals("Ganondorf")){
-				assertEquals(true, item.getAttributes().containsKey("alias"));
-				assertEquals("200", item.getAttributes().get("id"));		
+			else if(item.getAttributesMap().get("name").getValue().equals("Ganondorf")){
+				assertEquals(true, item.getAttributesMap().containsKey("alias"));
+				assertEquals("200", item.getAttributesMap().get("id").getValue());		
 				ganondorf = true;
 			}
 		}
@@ -87,12 +87,12 @@ public class DynamoDbTest {
 		List<Item> items = TestHandler.queryHandler.getItems(TestHandler.TABLE_NAME, "OR", filters);
 		
 		assertEquals(3, items.size());
-		assertEquals("Daisy", items.get(0).getAttributes().get("name"));
-		assertEquals("Peach", items.get(1).getAttributes().get("name"));
-		assertEquals(true, items.get(1).getAttributes().containsKey("type"));
-		assertEquals("42", items.get(2).getAttributes().get("age"));
-		assertEquals("Yoshi", items.get(2).getAttributes().get("name"));
-		assertEquals(false, items.get(1).getAttributes().containsKey("alias"));
+		assertEquals("Daisy", items.get(0).getAttributesMap().get("name").getValue());
+		assertEquals("Peach", items.get(1).getAttributesMap().get("name").getValue());
+		assertEquals(true, items.get(1).getAttributesMap().containsKey("type"));
+		assertEquals("42", items.get(2).getAttributesMap().get("age").getValue());
+		assertEquals("Yoshi", items.get(2).getAttributesMap().get("name").getValue());
+		assertEquals(false, items.get(1).getAttributesMap().containsKey("alias"));
 		
 		TestHandler.deleteTestTables();
 		TestHandler.createTestTables();
@@ -107,6 +107,6 @@ public class DynamoDbTest {
 		items = TestHandler.queryHandler.getItems(TestHandler.TABLE_NAME, "AND", filters);
 		
 		assertEquals(1, items.size());
-		assertEquals("Daisy", items.get(0).getAttributes().get("name"));
+		assertEquals("Daisy", items.get(0).getAttributesMap().get("name").getValue());
 	}
 }
