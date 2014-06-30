@@ -26,7 +26,6 @@ public class HypertableQueryHandler {
 	public static void createTable(String tableName, String indexedColumnFamily) {
 		try {
 			String queryString = String.format("CREATE TABLE %s (%s, INDEX %2$s)", tableName, indexedColumnFamily);
-			System.out.println(queryString);
 			HypertableHandler.CLIENT.hql_query(HypertableHandler.NAMESPACE, queryString);
 		}
 		catch (ClientException e) {
@@ -55,7 +54,6 @@ public class HypertableQueryHandler {
 	public static void deleteTable(String tableName) {
 		try {
 			String queryString = String.format("DROP TABLE IF EXISTS %s", tableName);
-			System.out.println(queryString);
 			HypertableHandler.CLIENT.hql_query(HypertableHandler.NAMESPACE, queryString);
 		}
 		catch (ClientException | TException e) {
@@ -77,6 +75,52 @@ public class HypertableQueryHandler {
 				}
 			}
 		}
+	}
+
+	public static Row getRowByKey(String tableName, String key) {
+		String queryString = String.format("SELECT * FROM %s WHERE ROW = \"%s\"", tableName, key);
+		try {
+			HqlResult result = HypertableHandler.CLIENT.hql_query(HypertableHandler.NAMESPACE, queryString);
+			List<Attribute> attributes = new ArrayList<>();
+
+			for (Cell cell : result.getCells()) {
+				attributes.add(new Attribute(cell.key.column_qualifier.toString(), new String(cell.getValue())));
+			}
+			
+			return new Row(attributes);
+		}
+		catch (ClientException | TException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static List<Row> getRowsByKeys(String tableName, List<String> keys) {
+		String queryString = String.format("SELECT * FROM %s WHERE ROW = ", tableName);
+		int counter = 0;
+		for (String key : keys) {
+			queryString += key;
+			if (counter < keys.size()) {
+				queryString += " OR ROW = ";
+			}
+			counter++;
+		}
+		try {
+			HqlResult result = HypertableHandler.CLIENT.hql_query(HypertableHandler.NAMESPACE, queryString);
+			List<Row> transformedResultList = new ArrayList<>();
+			List<Attribute> attributes = null;
+
+			for (Cell cell : result.getCells()) {
+				attributes = new ArrayList<>();
+				attributes.add(new Attribute(cell.key.column_qualifier.toString(), new String(cell.getValue())));
+				transformedResultList.add(new Row(attributes));
+			}
+			return transformedResultList;
+		}
+		catch (ClientException | TException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static List<Row> scanTable(String tableName, String conditionalOperator, List<Filter> filters) {

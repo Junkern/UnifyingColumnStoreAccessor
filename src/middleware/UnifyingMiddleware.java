@@ -4,7 +4,7 @@ public class UnifyingMiddleware {
 
 	private static QueryHandler queryHandler;
 
-	public static QueryHandler getQueryHandler() {
+	public synchronized static QueryHandler getQueryHandler() {
 		if (queryHandler == null) {
 			Configurator.init();
 			queryHandler = new QueryHandler();

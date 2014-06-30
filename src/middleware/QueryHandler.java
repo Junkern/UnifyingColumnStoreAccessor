@@ -13,7 +13,11 @@ import model.Row;
 
 import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
 
-
+/**
+ * {@inheritDoc}
+ * @author Benjamin Räthlein
+ *
+ */
 public class QueryHandler implements MiddlewareInterface {
 
 	@Override
@@ -72,7 +76,7 @@ public class QueryHandler implements MiddlewareInterface {
 	}
 
 	@Override
-	public void insertItems(String tableName, List<Row> items) {
+	public void insertRows(String tableName, List<Row> items) {
 		switch (Configurator.getUsedDatabase()) {
 		case Cassandra:
 			CassandraQueryHandler.insertItems(keyspace, tableName, items);
@@ -89,32 +93,33 @@ public class QueryHandler implements MiddlewareInterface {
 	}
 
 	@Override
-	public Row getItemByKey(String tableName, Map<String, String> combinedKey) {
+	public Row getRowByKey(String tableName, Map<String, String> combinedKey) {
 		switch (Configurator.getUsedDatabase()) {
 		case Cassandra:
 			return CassandraQueryHandler.getRowByKey(keyspace, tableName, combinedKey)
 			break;
 		case DynamoDb:
-			return DynamoDbQueryHandler.getItemByKey(tableName, combinedKey);
+			return DynamoDbQueryHandler.getRowByKey(tableName, combinedKey);
 		case Hbase:
 			break;
 		case Hypertable:
-			break;
+			String key = combinedKey.entrySet().iterator().next().getValue();
+			return HypertableQueryHandler.getRowByKey(tableName, key);		
 		}
 
 		return null;
-	}
-	
+	}	
 
+	//TODO: allow select only from one table and not set of tables
 	@Override
-	public List<Row> getItemsByKeys(Map<String, ArrayList<Map<String, String>>> tableNamesWithKeys) {
+	public List<Row> getRowsByKeys(Map<String, ArrayList<Map<String, String>>> tableNamesWithKeys) {
 		switch (Configurator.getUsedDatabase()) {
 		case Cassandra:
 			break;
 		case DynamoDb:
 			return DynamoDbQueryHandler.getItemsByKeys(tableNamesWithKeys);
 		case Hbase:
-			break;
+			//return HypertableQueryHandler.getRowsByKeys(tableNamesWithKeys.get(0));
 		case Hypertable:
 			break;
 		}
@@ -123,7 +128,7 @@ public class QueryHandler implements MiddlewareInterface {
 	
 
 	@Override
-	public List<Row> getItems(String tableName, String conditionalOperator, List<Filter> filters) {
+	public List<Row> getRows(String tableName, String conditionalOperator, List<Filter> filters) {
 		switch (Configurator.getUsedDatabase()) {
 		case Cassandra:
 			return CassandraQueryHandler.scanTable(keyspace, tableName, conditionalOperator, filters);

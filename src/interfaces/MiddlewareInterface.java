@@ -9,11 +9,21 @@ import model.Row;
 
 
 public interface MiddlewareInterface {
+	/**
+	 * Create a table with given name and indexed column.
+	 * @param tableName
+	 * @param primaryKey DynamoDb: indexed primary key; Hypertable: indexed column family
+	 */
 	public void createTable(String tableName, String primaryKey);
 	public void deleteTable(String tableName);
-	public void insertItems(String tableName, List<Row> items);
-	public Row getItemByKey(String tableName, Map<String, String> combinedKey);
-	public List<Row> getItemsByKeys(Map<String, ArrayList<Map<String, String>>> tableNamesWithKeys);
-	public List<Row> getItems(String tableName, String conditionalOperator, List<Filter> filters);
+	/**
+	 * Insert rows into the table with given name.
+	 * @param tableName
+	 * @param rows
+	 */
+	public void insertRows(String tableName, List<Row> rows);
+	public Row getRowByKey(String tableName, Map<String, String> combinedKey);
+	public List<Row> getRowsByKeys(Map<String, ArrayList<Map<String, String>>> tableNamesWithKeys);
+	public List<Row> getRows(String tableName, String conditionalOperator, List<Filter> filters);
 	public List<String> getTableNames();
 }
