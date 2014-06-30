@@ -6,18 +6,18 @@ import java.util.List;
 import java.util.Map;
 
 
-public class Item {
+public class Row {
 	private Map<String, Attribute> attributes;
 	private Key key;
 	
-	public Item(List<Attribute> attributes) {
+	public Row(List<Attribute> attributes) {
 		this.attributes = new HashMap<>();
 		for(Attribute attribute : attributes){
 			this.attributes.put(attribute.getName(), attribute);
 		}
 	}
 	
-	public Item(Key key, List<Attribute> attributes){
+	public Row(Key key, List<Attribute> attributes){
 		this.key = key;
 		this.attributes = new HashMap<>();
 		for(Attribute attribute : attributes){

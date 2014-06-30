@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import model.Filter;
-import model.Item;
+import model.Row;
 
 import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
 
@@ -69,7 +69,7 @@ public class QueryHandler implements MiddlewareInterface {
 	}
 
 	@Override
-	public void insertItems(String tableName, List<Item> items) {
+	public void insertItems(String tableName, List<Row> items) {
 		switch (Configurator.getUsedDatabase()) {
 		case Cassandra:
 			break;
@@ -85,7 +85,7 @@ public class QueryHandler implements MiddlewareInterface {
 	}
 
 	@Override
-	public Item getItemByKey(String tableName, Map<String, String> combinedKey) {
+	public Row getItemByKey(String tableName, Map<String, String> combinedKey) {
 		switch (Configurator.getUsedDatabase()) {
 		case Cassandra:
 			break;
@@ -102,7 +102,7 @@ public class QueryHandler implements MiddlewareInterface {
 	
 
 	@Override
-	public List<Item> getItemsByKeys(Map<String, ArrayList<Map<String, String>>> tableNamesWithKeys) {
+	public List<Row> getItemsByKeys(Map<String, ArrayList<Map<String, String>>> tableNamesWithKeys) {
 		switch (Configurator.getUsedDatabase()) {
 		case Cassandra:
 			break;
@@ -118,7 +118,7 @@ public class QueryHandler implements MiddlewareInterface {
 	
 
 	@Override
-	public List<Item> getItems(String tableName, String conditionalOperator, List<Filter> filters) {
+	public List<Row> getItems(String tableName, String conditionalOperator, List<Filter> filters) {
 		switch (Configurator.getUsedDatabase()) {
 		case Cassandra:
 			break;

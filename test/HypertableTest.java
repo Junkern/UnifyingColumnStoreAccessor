@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Filter;
-import model.Item;
+import model.Row;
 
 import org.junit.Test;
 
@@ -120,9 +120,9 @@ public class HypertableTest {
 //		filter = new Filter("type", "=", "princess");
 //		filters.add(filter);
 		
-		List<Item> items = TestHandler.queryHandler.getItems(TestHandler.TABLE_NAME, "AND", filters);
+		List<Row> items = TestHandler.queryHandler.getItems(TestHandler.TABLE_NAME, "AND", filters);
 		System.out.println(items.size());
-		for (Item item : items) {
+		for (Row item : items) {
 			for (String key : item.getAttributesMap().keySet()) {
 				System.out.println(key + " " + item.getAttributesMap().get(key).getValue());
 			}

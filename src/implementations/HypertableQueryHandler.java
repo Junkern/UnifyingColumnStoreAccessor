@@ -5,7 +5,7 @@ import java.util.List;
 
 import model.Attribute;
 import model.Filter;
-import model.Item;
+import model.Row;
 
 import org.apache.thrift.TException;
 import org.hypertable.thriftgen.Cell;
@@ -63,8 +63,8 @@ public class HypertableQueryHandler {
 		}
 	}
 
-	public static void insertItems(String tableName, List<Item> items) {
-		for (Item item : items) {
+	public static void insertItems(String tableName, List<Row> items) {
+		for (Row item : items) {
 			String key = item.getKey().getValue();
 			for (Attribute attribute : item.getAttributes()) {
 				String queryString = String.format("INSERT INTO %s VALUES (\"%s\", \"%s:%s\", \"%s\")",
@@ -79,7 +79,7 @@ public class HypertableQueryHandler {
 		}
 	}
 
-	public static List<Item> scanTable(String tableName, String conditionalOperator, List<Filter> filters) {
+	public static List<Row> scanTable(String tableName, String conditionalOperator, List<Filter> filters) {
 		String whereClause = "";
 		for (Filter filter : filters) {
 			if (!whereClause.equals("")) {
@@ -92,13 +92,13 @@ public class HypertableQueryHandler {
 
 		try {
 			HqlResult result = HypertableHandler.CLIENT.hql_query(HypertableHandler.NAMESPACE, queryString);
-			List<Item> transformedResultList = new ArrayList<>();
+			List<Row> transformedResultList = new ArrayList<>();
 			List<Attribute> attributes = null;
 
 			for (Cell cell : result.getCells()) {
 				attributes = new ArrayList<>();
 				attributes.add(new Attribute(cell.key.column_qualifier.toString(), new String(cell.getValue())));
-				transformedResultList.add(new Item(attributes));
+				transformedResultList.add(new Row(attributes));
 			}
 			return transformedResultList;
 		}

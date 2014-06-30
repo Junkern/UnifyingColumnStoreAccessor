@@ -6,7 +6,7 @@ import java.util.Map;
 
 import model.Attribute;
 import model.Filter;
-import model.Item;
+import model.Row;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
@@ -87,9 +87,9 @@ public class DynamoDbQueryHandler {
 	 * @param tableName
 	 * @param items
 	 */
-	public static void insertItems(String tableName, List<Item> items) {
+	public static void insertItems(String tableName, List<Row> items) {
 		Map<String, AttributeValue> transformedItem = new HashMap<>();
-		for(Item item : items){
+		for(Row item : items){
 			for(Attribute attribute : item.getAttributes()){
 				transformedItem.put(attribute.getName(), new AttributeValue().withS(attribute.getValue()));
 			}
@@ -118,7 +118,7 @@ public class DynamoDbQueryHandler {
 	 * @param combinedKey
 	 * @return
 	 */
-	public static Item getItemByKey(String tableName, Map<String, String> combinedKey) {
+	public static Row getItemByKey(String tableName, Map<String, String> combinedKey) {
 		Map<String, AttributeValue> transformedKey = new HashMap<>();
 		for (String key : combinedKey.keySet()) {
 			transformedKey.put(key, new AttributeValue().withS(combinedKey.get(key)));
@@ -131,7 +131,7 @@ public class DynamoDbQueryHandler {
 			attributes.add(new Attribute(resultKey, result.getItem().get(resultKey).getS()));
 		}
 
-		return new Item(attributes);
+		return new Row(attributes);
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class DynamoDbQueryHandler {
 	 * @param combinedKey
 	 * @return
 	 */
-	public static List<Item> getItemsByKeys(Map<String, ArrayList<Map<String, String>>> tableNamesWithKeys) {
+	public static List<Row> getItemsByKeys(Map<String, ArrayList<Map<String, String>>> tableNamesWithKeys) {
 		HashMap<String, KeysAndAttributes> requestItems = new HashMap<String, KeysAndAttributes>();
 
 		for (String tableName : tableNamesWithKeys.keySet()) {
@@ -160,7 +160,7 @@ public class DynamoDbQueryHandler {
 
 		BatchGetItemResult result = DynamoDbHandler.CLIENT.batchGetItem(new BatchGetItemRequest().withRequestItems(requestItems));
 
-		List<Item> items = new ArrayList<>();
+		List<Row> items = new ArrayList<>();
 		for (String tableName : tableNamesWithKeys.keySet()) {
 			List<Map<String, AttributeValue>> tableResults = result.getResponses().get(tableName);
 			List<Attribute> attributes = null;
@@ -170,7 +170,7 @@ public class DynamoDbQueryHandler {
 				for (String key : tableResult.keySet()) {
 					attributes.add(new Attribute(key, tableResult.get(key).getS()));
 				}
-				items.add(new Item(attributes));
+				items.add(new Row(attributes));
 			}
 		}
 		return items;
@@ -188,7 +188,7 @@ public class DynamoDbQueryHandler {
 	 *            or OR connectors, no mix.
 	 * @return
 	 */
-	public static List<Item> scanTable(String tableName, List<Filter> filters, String conditionalOperator) {
+	public static List<Row> scanTable(String tableName, List<Filter> filters, String conditionalOperator) {
 		Map<String, Condition> scanFilter = new HashMap<>();
 		for (Filter filter : filters) {
 			scanFilter.put(filter.getAttributeName(),
@@ -199,14 +199,14 @@ public class DynamoDbQueryHandler {
 		ScanResult scanResult = DynamoDbHandler.CLIENT.scan(new ScanRequest(tableName)
 				.withConditionalOperator(conditionalOperator).withScanFilter(scanFilter));
 
-		ArrayList<Item> items = new ArrayList<>();
+		ArrayList<Row> items = new ArrayList<>();
 		List<Attribute> attributes = null;
 		for (Map<String, AttributeValue> result : scanResult.getItems()) {
 			attributes = new ArrayList<>();
 			for (String key : result.keySet()) {
 				attributes.add(new Attribute(key, result.get(key).getS()));
 			}
-			items.add(new Item(attributes));
+			items.add(new Row(attributes));
 		}
 
 		return items;

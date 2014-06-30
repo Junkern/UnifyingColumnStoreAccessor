@@ -6,7 +6,7 @@ import java.util.Map;
 import middleware.QueryHandler;
 import middleware.UnifyingMiddleware;
 import model.Attribute;
-import model.Item;
+import model.Row;
 import model.Key;
 
 
@@ -18,45 +18,45 @@ public class TestHandler {
 	public static QueryHandler queryHandler = UnifyingMiddleware.getQueryHandler();
 
 	public static void insertTestItems(String tableName) {
-		List<Item> items = new ArrayList<>();
+		List<Row> items = new ArrayList<>();
 		List<Attribute> attributes = new ArrayList<>();
 
 		if (tableName.equals(TABLE_NAME)) {
 			attributes.add(new Attribute("name", "Mario").withColumnFamil(INDEX));
-			items.add(new Item(new Key("id", "1"), attributes));
+			items.add(new Row(new Key("id", "1"), attributes));
 
 			attributes = new ArrayList<>();
 			attributes.add(new Attribute("name", "Bowser").withColumnFamil(INDEX));
 			attributes.add(new Attribute("type", "turtle").withColumnFamil(INDEX));
-			items.add(new Item(new Key("id", "2"), attributes));
+			items.add(new Row(new Key("id", "2"), attributes));
 
 			attributes = new ArrayList<>();
 			attributes.add(new Attribute("name", "Peach").withColumnFamil(INDEX));
 			attributes.add(new Attribute("type", "princess").withColumnFamil(INDEX));
 			attributes.add(new Attribute("age", "23").withColumnFamil(INDEX));
-			items.add(new Item(new Key("id", "3"), attributes));
+			items.add(new Row(new Key("id", "3"), attributes));
 
 			attributes = new ArrayList<>();
 			attributes.add(new Attribute("name", "Daisy").withColumnFamil(INDEX));
 			attributes.add(new Attribute("type", "princess").withColumnFamil(INDEX));
 			attributes.add(new Attribute("age", "25").withColumnFamil(INDEX));
-			items.add(new Item(new Key("id", "4"), attributes));
+			items.add(new Row(new Key("id", "4"), attributes));
 
 			attributes = new ArrayList<>();
 			attributes.add(new Attribute("name", "Yoshi").withColumnFamil(INDEX));
 			attributes.add(new Attribute("type", "dinosaur").withColumnFamil(INDEX));
 			attributes.add(new Attribute("age", "42").withColumnFamil(INDEX));
-			items.add(new Item(new Key("id", "5"), attributes));
+			items.add(new Row(new Key("id", "5"), attributes));
 		}
 		else if (tableName.equals(TABLE_NAME2)) {
 			attributes.add(new Attribute("name", "Link").withColumnFamil(INDEX));
 			attributes.add(new Attribute("status", "hero of time").withColumnFamil(INDEX));
-			items.add(new Item(new Key("id", "100"), attributes));
+			items.add(new Row(new Key("id", "100"), attributes));
 
 			attributes = new ArrayList<>();
 			attributes.add(new Attribute("name", "Ganondorf").withColumnFamil(INDEX));
 			attributes.add(new Attribute("alias", "Ganon").withColumnFamil(INDEX));
-			items.add(new Item(new Key("id", "200"), attributes));
+			items.add(new Row(new Key("id", "200"), attributes));
 		}
 		queryHandler.insertItems(tableName, items);
 	}
