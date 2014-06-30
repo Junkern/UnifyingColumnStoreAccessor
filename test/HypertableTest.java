@@ -1,8 +1,11 @@
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import model.Attribute;
 import model.Filter;
 import model.Row;
 
@@ -19,19 +22,22 @@ public class HypertableTest {
 		assertEquals(2, TestHandler.getTestTableNames(TestHandler.queryHandler.getTableNames()).size());
 	}
 
-//	@Test
-//	public void getItemKeyTest() {
-//		TestHandler.deleteTestTables();
-//		TestHandler.createTestTables();
-//		TestHandler.insertTestItems(TestHandler.TABLE_NAME);
-//
-//		Map<String, String> key = new HashMap<>();
-//		key.put("id", "2");
-//
-//		Item item = TestHandler.queryHandler.getItemByKey(TestHandler.TABLE_NAME, key);
-//		assertEquals("Bowser", item.getAttributes().get("name"));
-//		assertEquals(true, item.getAttributes().containsKey("type"));
-//	}
+	@Test
+	public void getRowByKeyTest() {
+		TestHandler.deleteTestTables();
+		TestHandler.createTestTables();
+		TestHandler.insertTestItems(TestHandler.TABLE_NAME);
+
+		Map<String, String> key = new HashMap<>();
+		key.put("id", "2");
+
+		Row row = TestHandler.queryHandler.getRowByKey(TestHandler.TABLE_NAME, key);
+		for(Attribute attribute : row.getAttributes()){
+			System.out.println(attribute.getName() + " " + attribute.getValue());
+		}
+		assertEquals("Bowser", row.getAttributesMap().get("name").getValue());
+		assertEquals(true, row.getAttributesMap().containsKey("type"));
+	}
 //
 //	@Test
 //	public void getBatchItemTest() {
@@ -120,8 +126,7 @@ public class HypertableTest {
 //		filter = new Filter("type", "=", "princess");
 //		filters.add(filter);
 		
-		List<Row> items = TestHandler.queryHandler.getItems(TestHandler.TABLE_NAME, "AND", filters);
-		System.out.println(items.size());
+		List<Row> items = TestHandler.queryHandler.getRows(TestHandler.TABLE_NAME, "AND", filters);
 		for (Row item : items) {
 			for (String key : item.getAttributesMap().keySet()) {
 				System.out.println(key + " " + item.getAttributesMap().get(key).getValue());

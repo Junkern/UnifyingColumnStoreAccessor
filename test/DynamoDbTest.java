@@ -30,7 +30,7 @@ public class DynamoDbTest {
 		Map<String, String> key = new HashMap<>();
 		key.put("id", "2");
 
-		Row item = TestHandler.queryHandler.getItemByKey(TestHandler.TABLE_NAME, key);
+		Row item = TestHandler.queryHandler.getRowByKey(TestHandler.TABLE_NAME, key);
 		assertEquals("Bowser", item.getAttributesMap().get("name").getValue());
 		assertEquals(true, item.getAttributesMap().containsKey("type"));
 	}
@@ -41,7 +41,7 @@ public class DynamoDbTest {
 		TestHandler.createTestTables();
 		TestHandler.insertTestItems(TestHandler.TABLE_NAME);
 		TestHandler.insertTestItems(TestHandler.TABLE_NAME2);
-		List<Row> items = TestHandler.queryHandler.getItemsByKeys(TestHandler.createKeys());
+		List<Row> items = TestHandler.queryHandler.getRowsByKeys(TestHandler.createKeys());
 		
 		assertEquals(4, items.size());		
 		boolean mario = false;
@@ -84,7 +84,7 @@ public class DynamoDbTest {
 		filter = new Filter("type", "EQ", "princess");
 		filters.add(filter);
 		
-		List<Row> items = TestHandler.queryHandler.getItems(TestHandler.TABLE_NAME, "OR", filters);
+		List<Row> items = TestHandler.queryHandler.getRows(TestHandler.TABLE_NAME, "OR", filters);
 		
 		assertEquals(3, items.size());
 		assertEquals("Daisy", items.get(0).getAttributesMap().get("name").getValue());
@@ -104,7 +104,7 @@ public class DynamoDbTest {
 		filter = new Filter("type", "EQ", "princess");
 		filters.add(filter);
 		
-		items = TestHandler.queryHandler.getItems(TestHandler.TABLE_NAME, "AND", filters);
+		items = TestHandler.queryHandler.getRows(TestHandler.TABLE_NAME, "AND", filters);
 		
 		assertEquals(1, items.size());
 		assertEquals("Daisy", items.get(0).getAttributesMap().get("name").getValue());

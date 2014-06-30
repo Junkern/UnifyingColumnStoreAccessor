@@ -118,7 +118,7 @@ public class DynamoDbQueryHandler {
 	 * @param combinedKey
 	 * @return
 	 */
-	public static Row getItemByKey(String tableName, Map<String, String> combinedKey) {
+	public static Row getRowByKey(String tableName, Map<String, String> combinedKey) {
 		Map<String, AttributeValue> transformedKey = new HashMap<>();
 		for (String key : combinedKey.keySet()) {
 			transformedKey.put(key, new AttributeValue().withS(combinedKey.get(key)));

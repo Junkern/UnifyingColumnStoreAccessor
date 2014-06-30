@@ -58,7 +58,7 @@ public class TestHandler {
 			attributes.add(new Attribute("alias", "Ganon").withColumnFamil(INDEX));
 			items.add(new Row(new Key("id", "200"), attributes));
 		}
-		queryHandler.insertItems(tableName, items);
+		queryHandler.insertRows(tableName, items);
 	}
 
 	public static void deleteTestTables() {
