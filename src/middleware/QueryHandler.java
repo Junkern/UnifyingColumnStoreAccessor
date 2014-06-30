@@ -1,4 +1,5 @@
 package middleware;
+import implementations.CassandraQueryHandler;
 import implementations.DynamoDbQueryHandler;
 import implementations.HypertableQueryHandler;
 import interfaces.MiddlewareInterface;
@@ -35,6 +36,7 @@ public class QueryHandler implements MiddlewareInterface {
 	public List<String> getTableNames() {
 		switch (Configurator.getUsedDatabase()) {
 		case Cassandra:
+			return CassandraQueryHandler.getTableNames();
 			break;
 		case DynamoDb:
 			ListTablesResult result = DynamoDbQueryHandler.listTables();
@@ -52,6 +54,7 @@ public class QueryHandler implements MiddlewareInterface {
 		try {
 			switch (Configurator.getUsedDatabase()) {
 			case Cassandra:
+				CassandraQueryHandler.deleteTable(keyspace, tableName);
 				break;
 			case DynamoDb:
 				DynamoDbQueryHandler.deleteTable(tableName);
@@ -72,6 +75,7 @@ public class QueryHandler implements MiddlewareInterface {
 	public void insertItems(String tableName, List<Row> items) {
 		switch (Configurator.getUsedDatabase()) {
 		case Cassandra:
+			CassandraQueryHandler.insertItems(keyspace, tableName, items);
 			break;
 		case DynamoDb:
 			DynamoDbQueryHandler.insertItems(tableName, items);
@@ -88,6 +92,7 @@ public class QueryHandler implements MiddlewareInterface {
 	public Row getItemByKey(String tableName, Map<String, String> combinedKey) {
 		switch (Configurator.getUsedDatabase()) {
 		case Cassandra:
+			return CassandraQueryHandler.getRowByKey(keyspace, tableName, combinedKey)
 			break;
 		case DynamoDb:
 			return DynamoDbQueryHandler.getItemByKey(tableName, combinedKey);
@@ -121,6 +126,7 @@ public class QueryHandler implements MiddlewareInterface {
 	public List<Row> getItems(String tableName, String conditionalOperator, List<Filter> filters) {
 		switch (Configurator.getUsedDatabase()) {
 		case Cassandra:
+			return CassandraQueryHandler.scanTable(keyspace, tableName, conditionalOperator, filters);
 			break;
 		case DynamoDb:
 			return DynamoDbQueryHandler.scanTable(tableName, filters, conditionalOperator);
